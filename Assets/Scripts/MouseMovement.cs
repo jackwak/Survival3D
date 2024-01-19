@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MouseMovement : MonoBehaviour
+public class MouseMovement : MonoBehaviour // karakter aþaðý baktýðýnda checksphere da karakterle yukarý çýktýðýndan zýplamýyor
 {
     public float MouseSensitivity = 100f;
 
@@ -25,7 +25,6 @@ public class MouseMovement : MonoBehaviour
         xRot = Mathf.Clamp(xRot, -90f, 90f);
 
         transform.localRotation = Quaternion.Euler(xRot, yRot, 0);
-
 
     }
 }
