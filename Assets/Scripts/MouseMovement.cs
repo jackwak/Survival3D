@@ -2,16 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MouseMovement : MonoBehaviour // karakter aþaðý baktýðýnda checksphere da karakterle yukarý çýktýðýndan zýplamýyor
+public class MouseMovement : MonoBehaviour
 {
     public float MouseSensitivity = 100f;
+    [SerializeField] private Transform _playerTransform;
+    [SerializeField] private Transform _cameraTransform;
 
     private float xRot;
     private float yRot;
 
+    private void Awake()
+    {
+        _playerTransform = GetComponent<Transform>();
+    }
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+
+        if (Camera.main != null)
+            _cameraTransform = Camera.main.transform;
     }
 
     private void Update()
@@ -24,7 +34,7 @@ public class MouseMovement : MonoBehaviour // karakter aþaðý baktýðýnda checksph
 
         xRot = Mathf.Clamp(xRot, -90f, 90f);
 
-        transform.localRotation = Quaternion.Euler(xRot, yRot, 0);
-
+        _playerTransform.localRotation = Quaternion.Euler(0, yRot, 0);
+        _cameraTransform.localRotation = Quaternion.Euler(xRot, 0, 0);
     }
 }
