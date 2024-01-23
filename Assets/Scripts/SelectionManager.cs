@@ -7,7 +7,6 @@ public class SelectionManager : MonoBehaviour
 {
     [SerializeField] 
     private GameObject _interactionInfoUI;
-    [SerializeField] 
     private Camera _mainCamera;
     private TMP_Text _interactionText;
 

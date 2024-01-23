@@ -5,8 +5,8 @@ using UnityEngine;
 public class MouseMovement : MonoBehaviour
 {
     public float MouseSensitivity = 100f;
-    [SerializeField] private Transform _playerTransform;
-    [SerializeField] private Transform _cameraTransform;
+    private Transform _playerTransform;
+    private Transform _cameraTransform;
 
     private float xRot;
     private float yRot;
