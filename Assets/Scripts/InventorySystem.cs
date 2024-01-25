@@ -93,6 +93,24 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    public void AddToInventory(string itemName)
+    {
+
+        if (IsFull())
+        {
+            //_isFull = true;
+        }
+        else
+        {
+            _whatSlotToEquip = EmptySlot();
+
+            GameObject prefabRef = (GameObject)AssetDatabase.LoadMainAssetAtPath(_prefabPath + itemName + ".prefab");
+            _itemToAdd = Instantiate(prefabRef, _whatSlotToEquip.transform.position, _whatSlotToEquip.transform.rotation);
+            _itemToAdd.transform.SetParent(_whatSlotToEquip.transform);
+            _itemList.Add(itemName);
+        }
+    }
+
     private GameObject EmptySlot()
     {
         foreach (GameObject slot in SlotList)

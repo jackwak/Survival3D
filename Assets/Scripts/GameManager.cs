@@ -27,6 +27,9 @@ public class GameManager : MonoBehaviour
         // subscribe events
         InventorySystem.Instance.DisabledInventory += OnDisabledInventory;
         InventorySystem.Instance.EnabledInventory += OnEnabledInventory;
+
+        CraftingSystem.Instance.DisabledCraft += OnDisableCraft;
+        CraftingSystem.Instance.EnabledCraft += OnEnabledCraft;
     }
 
     public void EnableMouseMovement()
@@ -64,10 +67,28 @@ public class GameManager : MonoBehaviour
         _selectionManager.SetState = State.INVENTORY;
     }
 
+    public void OnEnabledCraft()
+    {
+        DisableMouseMovement();
+        DisablePlayerMovement();
+        _selectionManager.SetState = State.INVENTORY;
+    }
+
+    public void OnDisableCraft()
+    {
+        EnableMouseMovement();
+        EnablePlayerMovement();
+
+        _selectionManager.SetState = State.GAME;
+    }
+
     private void OnDestroy()
     {
         // unsubscribe events
         InventorySystem.Instance.DisabledInventory -= OnDisabledInventory;
         InventorySystem.Instance.EnabledInventory -= OnEnabledInventory;
+
+        CraftingSystem.Instance.DisabledCraft -= OnDisableCraft;
+        CraftingSystem.Instance.EnabledCraft -= OnEnabledCraft;
     }
 }
