@@ -16,9 +16,13 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 
     private void Awake()
     {
-        _canvas = transform.root.GetComponent<Canvas>();
         _rectTransform = GetComponent<RectTransform>();
         _canvasGroup = GetComponent<CanvasGroup>();
+    }
+
+    private void Start()
+    {
+        _canvas = transform.root.GetComponent<Canvas>();
     }
 
 
@@ -36,7 +40,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 
     public void OnDrag(PointerEventData eventData)
     {
-        _rectTransform.anchoredPosition += eventData.delta; // / _canvas.scaleFactor;
+        _rectTransform.anchoredPosition += eventData.delta / _canvas.scaleFactor;
 
     }
 

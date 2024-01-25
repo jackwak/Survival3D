@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace FiveRabbitsDemo
 {
-    public class AnimatorParamatersChange : MonoBehaviour
+    public class AnimatorParamatersChange : UnityEngine.MonoBehaviour
     {
 
         private string[] m_buttonNames = new string[] { "Idle", "Run", "Dead" };

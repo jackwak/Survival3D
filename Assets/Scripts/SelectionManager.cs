@@ -11,6 +11,10 @@ public class SelectionManager : MonoBehaviour
     private TMP_Text _interactionText;
 
     private State _state = new State();
+    public State SetState
+    {
+        set { _state = value; }
+    }
 
     private void Start()
     {
@@ -38,12 +42,11 @@ public class SelectionManager : MonoBehaviour
                     {
                         SetItemNameToInteractText(interactableItem);
 
-
                         if (selectionTransform.TryGetComponent<ICollectable>(out var collectableItem))
                         {
                             if (Input.GetKeyDown(KeyCode.E))
                             {
-                                TakeItem(collectableItem);
+                                InventorySystem.Instance.AddToInventory(collectableItem);
                             }
                         }
                     }
@@ -67,21 +70,6 @@ public class SelectionManager : MonoBehaviour
                 break;
         }
         
-    }
-
-    private void TakeItem(ICollectable item)
-    {
-        bool isTook = item.TakeItem();
-
-        if (isTook)
-        {
-            AddInventory(item);
-        }
-    }
-
-    private void AddInventory(ICollectable item)
-    {
-        Debug.Log("Item Added Inventory");
     }
 
     private void SetItemNameToInteractText(IInteractable item)

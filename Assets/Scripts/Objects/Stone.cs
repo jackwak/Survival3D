@@ -2,26 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stone : MonoBehaviour, IInteractable, ICollectable
+public class Stone : MonoBehaviour, ICollectable
 {
-    [SerializeField] 
-    private string _name;
-    private bool isTook;
+    [SerializeField] private string _name;
 
     public string GetName => _name;
 
-    public bool TakeItem()
+    public void TakeItem()
     {
-        if (!isTook)
-        {
-            // take item
-            gameObject.SetActive(false);
-            isTook = true;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        // take item
+        Destroy(gameObject);
     }
 }

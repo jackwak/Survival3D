@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private GameObject _player;
+    [SerializeField] private SelectionManager _selectionManager;
 
     private void Awake()
     {
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // subscribe events
         InventorySystem.Instance.DisabledInventory += OnDisabledInventory;
         InventorySystem.Instance.EnabledInventory += OnEnabledInventory;
     }
@@ -51,16 +53,20 @@ public class GameManager : MonoBehaviour
     {
         EnableMouseMovement();
         EnablePlayerMovement();
+
+        _selectionManager.SetState = State.GAME;
     }
 
     public void OnEnabledInventory()
     {
         DisableMouseMovement();
         DisablePlayerMovement();
+        _selectionManager.SetState = State.INVENTORY;
     }
 
     private void OnDestroy()
     {
+        // unsubscribe events
         InventorySystem.Instance.DisabledInventory -= OnDisabledInventory;
         InventorySystem.Instance.EnabledInventory -= OnEnabledInventory;
     }

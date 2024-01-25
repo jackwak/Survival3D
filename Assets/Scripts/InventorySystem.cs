@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEditor;
 
 public class InventorySystem : MonoBehaviour
 {
@@ -12,7 +13,17 @@ public class InventorySystem : MonoBehaviour
 
     [SerializeField]
     private GameObject _inventoryScreenUI;
-    private bool _isOpen;
+    
+
+    public List<GameObject> SlotList = new List<GameObject>();
+    [SerializeField] 
+    private List<string> _itemList = new List<string>();
+    private GameObject _itemToAdd;
+    private GameObject _whatSlotToEquip;
+    private bool _isOpen = false;
+    //private bool _isFull = false;
+
+    private string _prefabPath = "Assets/Prefabs/Inventory Item/";
 
     private void Awake()
     {
@@ -28,7 +39,7 @@ public class InventorySystem : MonoBehaviour
 
     private void Start()
     {
-        _isOpen = false;
+        PopulateSlotList();
     }
 
 
@@ -51,4 +62,69 @@ public class InventorySystem : MonoBehaviour
             _isOpen = false;
         }
     }
+
+    private void PopulateSlotList()
+    {
+        Transform slot = _inventoryScreenUI.transform.GetChild(0);
+        foreach (Transform child in slot)
+        {
+            SlotList.Add(child.gameObject);
+        }
+    }
+
+    public void AddToInventory(ICollectable item)
+    {
+        string itemName = item.GetName;
+
+        if (IsFull())
+        {
+            //_isFull = true;
+        }
+        else
+        {
+            _whatSlotToEquip = EmptySlot();
+
+            GameObject prefabRef = (GameObject)AssetDatabase.LoadMainAssetAtPath(_prefabPath + itemName + ".prefab");
+            _itemToAdd = Instantiate(prefabRef, _whatSlotToEquip.transform.position, _whatSlotToEquip.transform.rotation);
+            _itemToAdd.transform.SetParent(_whatSlotToEquip.transform);
+            _itemList.Add(itemName);
+
+            item.TakeItem();
+        }
+    }
+
+    private GameObject EmptySlot()
+    {
+        foreach (GameObject slot in SlotList)
+        {
+            if (slot.transform.childCount == 0)
+            {
+                return slot;
+            }
+        }
+
+        return null;
+    }
+
+    private bool IsFull()
+    {
+        int counter = 0;
+
+        foreach (GameObject slot in SlotList)
+        {
+            if (slot.transform.childCount > 0)
+            {
+                counter++;
+            }
+        }
+        if (counter == 21)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 }
