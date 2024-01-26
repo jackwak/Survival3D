@@ -54,8 +54,11 @@ public class GameManager : MonoBehaviour
 
     public void OnDisabledInventory()
     {
-        EnableMouseMovement();
-        EnablePlayerMovement();
+        if (!CraftingSystem.Instance.IsOpen)
+        {
+            EnableMouseMovement();
+            EnablePlayerMovement();
+        }
 
         _selectionManager.SetState = State.GAME;
     }
@@ -76,8 +79,11 @@ public class GameManager : MonoBehaviour
 
     public void OnDisableCraft()
     {
-        EnableMouseMovement();
-        EnablePlayerMovement();
+        if (!InventorySystem.Instance.IsOpen)
+        {
+            EnableMouseMovement();
+            EnablePlayerMovement();
+        }
 
         _selectionManager.SetState = State.GAME;
     }

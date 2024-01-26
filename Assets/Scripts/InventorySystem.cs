@@ -17,11 +17,10 @@ public class InventorySystem : MonoBehaviour
 
     public List<GameObject> SlotList = new List<GameObject>();
     [SerializeField] 
-    private List<string> _itemList = new List<string>();
+    public List<string> ItemList = new List<string>();
     private GameObject _itemToAdd;
     private GameObject _whatSlotToEquip;
-    private bool _isOpen = false;
-    //private bool _isFull = false;
+    public bool IsOpen = false;
 
     private string _prefabPath = "Assets/Prefabs/Inventory Item/";
 
@@ -45,21 +44,26 @@ public class InventorySystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I) && !_isOpen)
+        if (Input.GetKeyDown(KeyCode.I) && !IsOpen)
         {
             EnabledInventory();
             
             _inventoryScreenUI.SetActive(true);
+            
             Cursor.lockState = CursorLockMode.None;
-            _isOpen = true;
+            IsOpen = true;
         }
-        else if (Input.GetKeyDown(KeyCode.I) && _isOpen)
+        else if (Input.GetKeyDown(KeyCode.I) && IsOpen)
         {
             DisabledInventory();
 
             _inventoryScreenUI.SetActive(false);
-            Cursor.lockState = CursorLockMode.Locked;
-            _isOpen = false;
+
+            if (!CraftingSystem.Instance.IsOpen)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            IsOpen = false;
         }
     }
 
@@ -87,11 +91,13 @@ public class InventorySystem : MonoBehaviour
             GameObject prefabRef = (GameObject)AssetDatabase.LoadMainAssetAtPath(_prefabPath + itemName + ".prefab");
             _itemToAdd = Instantiate(prefabRef, _whatSlotToEquip.transform.position, _whatSlotToEquip.transform.rotation);
             _itemToAdd.transform.SetParent(_whatSlotToEquip.transform);
-            _itemList.Add(itemName);
+            ItemList.Add(itemName);
 
             item.TakeItem();
         }
     }
+
+    
 
     public void AddToInventory(string itemName)
     {
@@ -107,11 +113,11 @@ public class InventorySystem : MonoBehaviour
             GameObject prefabRef = (GameObject)AssetDatabase.LoadMainAssetAtPath(_prefabPath + itemName + ".prefab");
             _itemToAdd = Instantiate(prefabRef, _whatSlotToEquip.transform.position, _whatSlotToEquip.transform.rotation);
             _itemToAdd.transform.SetParent(_whatSlotToEquip.transform);
-            _itemList.Add(itemName);
+            ItemList.Add(itemName);
         }
     }
 
-    private GameObject EmptySlot()
+    public GameObject EmptySlot()
     {
         foreach (GameObject slot in SlotList)
         {
@@ -145,4 +151,40 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    public void RemoveItem(string nameToRemove, int amountToRemove)
+    {
+        int counter = amountToRemove;
+
+        for (int i = SlotList.Count - 1; i >= 0; i--)
+        {
+            if (SlotList[i].transform.childCount > 0)
+            {
+                if (SlotList[i].transform.GetChild(0).name == nameToRemove + "(Clone)" && counter != 0)
+                {
+                    Destroy(SlotList[i].transform.GetChild(0).gameObject);
+
+                    counter--;
+                }
+            }
+        }
+    }
+
+    public void ReCalculateList()
+    {
+        ItemList.Clear();
+
+        foreach (var slot in SlotList)
+        {
+            if (slot.transform.childCount > 0)
+            {
+                string name = slot.transform.GetChild(0).name; //Stone(Clone)
+                string str2 = "(Clone)";
+                string result = name.Replace(str2, "");
+
+                ItemList.Add(result);
+            }
+        }
+    }
+
+    
 }
